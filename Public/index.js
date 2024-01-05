@@ -11,6 +11,7 @@ socket.on('disconnect', () => {
   // and sending this data to server
 // add these lines
 socket.on('data', data => {
+  console.log(data)
   const outputElement = document.getElementById('output'); // Make sure you have an element with this ID in your HTML
   outputElement.textContent += data + '\n'; // Append the received data
 });

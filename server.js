@@ -1,29 +1,3 @@
-// const http = require('http')
-// const express = require('express')
-// const app = express()
-
-// const Server = http.createServer(app)
-// const port = 3000
-
-
-// // and add lines:
-// const io = require('socket.io').listen(Server) // we creating socket object
-
-// app.use(express.static(__dirname + '/public')) 
-// // we serving files from "public" directory
-
-// io.on('connection', socket => {
-//   console.log('a user connected')
-//   socket.emit('connected')
-//   socket.on('click', ({ id, x, y }) => {
-//     console.log(`socket with id ${id} just clicked on { ${x}, ${y} }`)
-//     // print to console event from web page
-//     socket.emit('click') // and let page knows it
-//   })
-// })
-
-
-
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
@@ -35,7 +9,7 @@ const { ReadlineParser } = require('@serialport/parser-readline');
 
 
 const app = express();
-app.use(express.static('public'));
+app.use(express.static('Public'));
 const server = http.createServer(app);
 const io = socketIO(server);
 
@@ -53,7 +27,9 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  parser.on('data', line => console.log(`> ${line}`));
+  parser.on('data', line => {
+    io.emit('data', line);
+});
 
   socket.on('disconnect', () => {
     console.log('User disconnected');
