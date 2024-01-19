@@ -5,17 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/index.js"></script>
     <title>ZMODEM</title>
-</head>
-<body>
-  <div id="output"></div>
     <style>
         body {
             transition: all .1s;
-            /* transition for smoothness */
         }
     </style>
+</head>
+<body>
+    <div id="output"></div>
+    <br>
+    <button id="get-last-file">Get Last File</button>
+    <br>
+    <button id="start-transfer">Start File Transfer</button>
+    <div id="file-content"></div>
 
+    <script src="/index.js"></script>
 </body>
 </html>
