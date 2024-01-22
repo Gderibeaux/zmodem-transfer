@@ -13,13 +13,96 @@
     </style>
 </head>
 <body>
-    <div id="output"></div>
-    <br>
     <button id="get-last-file">Get Last File</button>
-    <br>
     <button id="start-transfer">Start File Transfer</button>
+    <button id="connect">Connect to Serial Device</button>
+    <div id="output"></div>
     <div id="file-content"></div>
-
     <script src="/index.js"></script>
+    <script src="/zmodemjs/src/zmodem_browser.js"></script>
 </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket File Transfer</title>
+</head>
+<body>
+    <button id="fetchFileButton">Fetch File</button>
+    <pre id="fileContent"></pre>
+
+    <script>
+        const fetchFileButton = document.getElementById('fetchFileButton');
+        const fileContent = document.getElementById('fileContent');
+
+        fetchFileButton.addEventListener('click', () => {
+            const filename = 'myfile.txt'; // Replace with the desired filename
+            fetch(`/api/fetchfile?filename=${filename}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    fileContent.textContent = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching file:', error);
+                    fileContent.textContent = 'Error fetching file';
+                });
+        });
+    </script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket File Transfer</title>
+</head>
+<body>
+    <input type="file" id="fileInput">
+    <button id="sendFileButton">Send File to Onion Omega</button>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const sendFileButton = document.getElementById('sendFileButton');
+
+        const socket = new WebSocket('ws://localhost:3000'); // WebSocket connection to your server
+
+        socket.addEventListener('open', () => {
+            console.log('WebSocket connected');
+        });
+
+        socket.addEventListener('message', (event) => {
+            // Handle incoming messages from the server (if needed)
+            console.log('Received from server:', event.data);
+        });
+
+        sendFileButton.addEventListener('click', () => {
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    const fileData = event.target.result;
+                    socket.send(fileData); // Send the file data to the server
+
+                    // You can also display a message to the user indicating that the file is being sent
+                    console.log('Sending file to Onion Omega...');
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html> -->

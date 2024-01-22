@@ -9,27 +9,6 @@ const fs = require('fs'); // File system module for handling file operations
 const path = require('path'); // Path module for handling file paths
 
 
-// const SerialPort = require('serialport');
-const { SerialPort } = require('serialport');
-const port = new SerialPort({
-path: '/dev/ttyS2',
-baudRate: 9600,
-dataBits: 8,
-stopBits: 1,
-parity: 'none',
-});
-const { ReadlineParser } = require('@serialport/parser-readline');
-
-
-// const port = new SerialPort('COM2', { baudRate: 115200 });
-const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
-
-parser.on('data', line => {
-    console.log(`> ${line}`);
-    // Handle incoming data here
-});
-
-
 // Initialize Express application
 const app = express();
 app.use(express.static('Public')); // Serve static files from the 'Public' directory
@@ -94,7 +73,7 @@ io.on('connection', (socket) => {
         console.log('Start Zmodem Transfer event received');
 
         // Set the path to save the received file
-        const receivedFilePath = path.join(filesDirectory, 'received_file.txt');
+        const receivedFilePath = path.join(filesDirectory, 'new_world.txt');
 
         // Spawn the 'rz' process for Zmodem transfer
         const rz = spawn('rz', ['-y', '-E', '-b'], {
@@ -142,3 +121,67 @@ io.on('connection', (socket) => {
 server.listen(3000, () => {
     console.log('Server listening on port 3000');
 });
+
+
+
+
+
+// const express = require('express');
+// const http = require('http');
+// const WebSocket = require('ws');
+// const fs = require('fs');
+// const path = require('path');
+// const { SerialPort } = require('serialport'); // Import the SerialPort library
+
+// const app = express();
+// const server = http.createServer(app);
+// const wss = new WebSocket.Server({ server });
+
+// // Define the path to the serial port of your Onion Omega device
+
+// // Create a SerialPort instance
+// const serialPort = new SerialPort({
+// path: '/dev/tty.usbserial-0001',
+// baudRate: 9600,
+// dataBits: 8,
+// stopBits: 1,
+// parity: 'none',
+// });
+
+// // Serve your HTML and other static files here (similar to your previous setup)
+// app.use(express.static(path.join(__dirname, 'Public')));
+
+// wss.on('connection', (ws) => {
+//     console.log('WebSocket connected');
+
+//     ws.on('message', (message) => {
+//         // Handle incoming messages from the client (e.g., file data)
+//         // You can save the received data to a file or process it as needed
+//         // For simplicity, let's assume you save it to a file:
+//         fs.writeFileSync(path.join(__dirname, 'received_file.txt'), message, 'utf8');
+//         console.log('Received and saved file data');
+
+//         // Implement serial port logic to send data to Onion Omega device
+//         serialPort.write(message, (err) => {
+//             if (err) {
+//                 console.error('Error sending data to Onion Omega:', err);
+//             } else {
+//                 console.log('Data sent to Onion Omega');
+//             }
+//         });
+//     });
+// });
+
+// server.listen(3000, () => {
+//     console.log('Server listening on port 3000');
+// });
+
+// // Handle data received from the Onion Omega device via serial port
+// serialPort.on('data', (data) => {
+//     // Send the received data to all connected WebSocket clients
+//     wss.clients.forEach((client) => {
+//         if (client.readyState === WebSocket.OPEN) {
+//             client.send(data);
+//         }
+//     });
+// });
