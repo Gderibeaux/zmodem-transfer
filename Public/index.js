@@ -57,53 +57,43 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('start-transfer').addEventListener('click', () => {
     console.log('Start transfer button clicked');
     socket.emit('startZmodemTransfer');
+    // startZmodemReception();
   });
 
-document.getElementById('connect').addEventListener('click', async () => {
-    if ('serial' in navigator) {
-        try {
-            // Requesting a port and opening a connection
-            const port = await navigator.serial.requestPort();
-            await port.open({ baudRate: 9600 });
+  // async function startZmodemReception() {
+  //   if ('serial' in navigator) {
+  //     try {
+  //       const port = await navigator.serial.requestPort();
+  //       await port.open({ baudRate: 115200 });
 
-            // Setting up a text decoder to read incoming data
-            const textDecoder = new TextDecoderStream();
-            port.readable.pipeTo(textDecoder.writable);
-            const reader = textDecoder.readable.getReader();
+  //       const textDecoder = new TextDecoderStream();
+  //       port.readable.pipeTo(textDecoder.writable);
+  //       const reader = textDecoder.readable.getReader();
 
-            // Setting up a text encoder to send data
-            const textEncoder = new TextEncoderStream();
-            textEncoder.readable.pipeTo(port.writable);
-            const writer = textEncoder.writable.getWriter();
+  //       const zmodemReceive = new ZmodemReceive(); // Placeholder for Zmodem logic
 
-            // Reading loop for incoming data
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    reader.releaseLock();
-                    break;
-                }
-                // Handle received data
-                console.log(value);
-            }
+  //       while (true) {
+  //         const { value, done } = await reader.read();
+  //         if (done) {
+  //           reader.releaseLock();
+  //           break;
+  //         }
 
-            // Function to write data to the serial port
-            async function writeData(data) {
-                await writer.write(data);
-            }
+  //         zmodemReceive.onDataReceived(value); // Process received data with Zmodem logic
 
-            // Add your logic to use writeData function as needed
-
-        } catch (error) {
-            // Error handling for serial port access
-            console.error('Error accessing serial port:', error);
-        }
-    } else {
-        // If Web Serial API is not supported in the browser
-        console.log('Web Serial API not supported.');
-    }
-});
-
+  //         if (zmodemReceive.isTransferComplete()) {
+  //           const receivedFile = zmodemReceive.getFile();
+  //           // Handle the received file (e.g., display or save it)
+  //           break;
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error('Error accessing serial port:', error);
+  //     }
+  //   } else {
+  //     console.log('Web Serial API not supported.');
+  //   }
+  // }
 
   function updateOutput(data) {
     console.log("Received Data: ", data);
