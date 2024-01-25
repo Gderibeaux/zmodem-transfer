@@ -418,6 +418,7 @@ const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('serialport');
 
 
+
 // Initialize Express application
 const app = express();
 app.use(express.static('Public')); // Serve static files from the 'Public' directory
@@ -440,8 +441,17 @@ if (!fs.existsSync(filesDirectory)) {
 
 // // Initialize the serial port
 // Set up serial port communication
-const port = new SerialPort('/dev/ttyS2', { baudRate: 115200 }); // Replace '/dev/ttyUSB0' with your port
+const port = new SerialPort({
+  path: '/dev/ttyS2',
+  baudRate: 115200,
+  dataBits: 8,
+  stopBits: 1,
+  parity: 'none',
+});
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+port.on('error', function(err) {
+  console.log('Error: ', err.message);
+})
 
 parser.on('data', line => {
     console.log(`> ${line}`);
